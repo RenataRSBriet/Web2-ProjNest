@@ -69,8 +69,8 @@ describe('UserValidator unit tests', () => {
          expect(sut.errors['email']).toStrictEqual([
             'email should not be empty',
             'email must be a string',
-            'email must be shorter than or equal to 225 characters',
             'email must be an email',
+            'email must be shorter than or equal to 255 characters',
 
          ])
       });
@@ -134,21 +134,21 @@ describe('UserValidator unit tests', () => {
    });
 
    describe('Password field', () => {
-      it('Email field is null - error', () => {
+      it('Password field is null - error', () => {
          const isValid = sut.validate(null as any);
          expect(isValid).toBeFalsy();
-         expect(sut.errors['email']).toStrictEqual([
+         expect(sut.errors['password']).toStrictEqual([
             'password should not be empty',
             'password must be a string',
-            'password must be shorter than or equal to 225 100',
+            'password must be shorter than or equal to 100 characters',
 
          ])
       });
 
-      it('Email field is empty - error', () => {
+      it('Password field is empty - error', () => {
          const isValid = sut.validate({
             ...UserDataBuilder({}),
-            email: '' as any,
+            password: '' as any,
          });
          expect(isValid).toBeFalsy();
          expect(sut.errors['password']).toStrictEqual([
@@ -168,28 +168,14 @@ describe('UserValidator unit tests', () => {
          ]);
       });
 
-      it('Password field is a number', () => {
-         const isValid = sut.validate({
-            ...UserDataBuilder({}),
-            password: '' as any,
-         });
-         expect(isValid).toBeFalsy();
-         expect(sut.errors['password']).toStrictEqual([
-            'password must be a string',
-            'password must be an password',
-            'password must be shorter than or equal to 255 characters',
-         ]);
-      });
-
       it('password field is larger then 100 character - error', () => {
          const isValid = sut.validate({
             ...UserDataBuilder({}),
-            password: 'a'.repeat(100) as any,
+            password: 'a'.repeat(101) as any,
          });
          expect(isValid).toBeFalsy();
          expect(sut.errors['password']).toStrictEqual([
-            'password must be an password',
-            'password must be shorter than or equal to 255 characters',
+            'password must be shorter than or equal to 100 characters',
          ]);
       });
 
